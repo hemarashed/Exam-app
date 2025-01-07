@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>اختبار إلكتروني</title>
+    <style>
+
+        body {
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(to bottom, #4facfe, #00b4d8);
+            color: #333;
+        }
+
+        header {
+            background: #0077b6;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            margin: 0;
+        }
+
+        .container {
+            padding: 20px 10%;
+            background: #fff;
+            color: #333;
+            border-radius: 10px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+        }
+
+        .question {
+            margin-bottom: 20px;
+        }
+
+        .question h2 {
+            font-size: 20px;
+            color: #00b4d8;
+        }
+
+        @media (max-width: 375px) and (max-height: 801px) {
+            .question h2 {
+                font-size: 16px;
+            }
+        }
+
+        .options {
+            list-style: none;
+            padding: 0;
+        }
+
+        .options li {
+            margin-bottom: 10px;
+        }
+
+        .options input[type="radio"] {
+            margin-right: 10px;
+        }
+
+        .submit-btn {
+            display: inline-block;
+            padding: 10px 20px;
+            font-size: 1rem;
+            color: #333;
+            background: #00b4d8;
+            border: 0px solid ;
+
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .submit-btn:hover {
+            background: #fff;
+            color: #333;
+            border: 3px solid #e97510;
+        }
+
+        .result {
+            text-align: center;
+            margin-top: 20px;
+            display: none;
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        .result h2 {
+            font-size: 2.5rem;
+            color: #e97510;
+        }
+
+        .result p {
+            font-size: 1.2rem;
+            color: #333;
+        }
+
+        .trophy {
+            margin-top: 20px;
+            animation: bounce 1.5s infinite;
+        }
+
+        .wrong-answers {
+            background: rgb(76, 76, 84);
+            color: #fff;
+            list-style: none;
+            padding: 2px;
+            border-radius: 5px;
+            box-shadow: 0 8px 20px rgba(255, 111, 0, 0.6);
+            animation: slideIn 0.8s ease-out;
+        }
+
+        .wrong-answers ul{
+            list-style: none;
+            margin-right: 0px;
+            padding-right: 0px;
+        }
+
+
+        .wrong-answers ul li{
+            margin-bottom: 20px;
+
+        }
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0);
+            }
+            40% {
+                transform: translateY(-20px);
+            }
+            60% {
+                transform: translateY(-10px);
+            }
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(-100%);
+            }
+            to {
+                transform: translateX(0);
+            }
+        }
+
+        footer {
+            background: #fff;
+            color: #333;
+            padding: 10px;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        footer a {
+            color: #00b4d8;
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
+    <script>
+        const questions = [
+            {
+                question: "ما هي عاصمة مصر؟",
+                options: ["القاهرة", "الإسكندرية", "الأقصر", "أسوان"],
+                correct: "القاهرة"
+            },
+            {
+                question: "ما هي أكبر قارة في العالم؟",
+                options: ["آسيا", "أفريقيا", "أوروبا", "أمريكا الجنوبية"],
+                correct: "آسيا"
+            },
+            {
+                question: "ما هو أطول نهر في العالم؟",
+                options: ["الأمازون", "النيجر", "النيل", "الدانوب"],
+                correct: "النيل"
+            }
+        ];
+
+        function loadQuestions() {
+            const container = document.querySelector('.container');
+            questions.forEach((q, index) => {
+                const questionDiv = document.createElement('div');
+                questionDiv.className = 'question';
+
+                const questionTitle = document.createElement('h2');
+                questionTitle.innerText = `${index + 1}. ${q.question}`;
+                questionDiv.appendChild(questionTitle);
+
+                const optionsList = document.createElement('ul');
+                optionsList.className = 'options';
+                q.options.forEach(option => {
+                    const optionItem = document.createElement('li');
+                    optionItem.innerHTML = `<label><input type="radio" name="q${index}" value="${option}"> ${option}</label>`;
+                    optionsList.appendChild(optionItem);
+                });
+
+                questionDiv.appendChild(optionsList);
+                container.insertBefore(questionDiv, container.querySelector('.submit-btn'));
+            });
+        }
+
+        function calculateScore() {
+            let score = 0;
+            let wrongAnswers = [];
+
+            questions.forEach((q, index) => {
+                const selected = document.querySelector(`input[name="q${index}"]:checked`);
+                if (selected) {
+                    if (selected.value === q.correct) {
+                        score++;
+                    } else {
+                        wrongAnswers.push({
+                            question: q.question,
+                            userAnswer: selected.value,
+                            correctAnswer: q.correct
+                        });
+                    }
+                } else {
+                    wrongAnswers.push({
+                        question: q.question,
+                        userAnswer: "لم يتم اختيار إجابة",
+                        correctAnswer: q.correct
+                    });
+                }
+            });
+
+            document.querySelector('.container').style.display = 'none';
+
+            const resultContainer = document.querySelector('.result');
+            resultContainer.style.display = 'block';
+
+            let resultHTML = `
+                <h2>نتيجتك</h2>
+                <p>لقد أجبت بشكل صحيح على ${score} من أصل ${questions.length} أسئلة.</p>
+            `;
+
+            if (score === questions.length) {
+                resultHTML += `
+                    <div class="trophy">
+                        <h1 style="width: 120px; margin: 20px auto; display: block;font-size:66px">🎉</h1>
+                        <p style="font-size: 16px; color:black;">تهانينا! لقد أجبت على جميع الأسئلة بشكل صحيح 🎉</p>
+                    </div>
+                `;
+            } else if (wrongAnswers.length > 0) {
+                resultHTML += `
+                    <div class="wrong-answers">
+                        <h3>إجابات خاطئة:</h3>
+                        <ul>
+                            ${wrongAnswers.map(wrong => `<li><strong>${wrong.question}</strong><br>إجابتك: ${wrong.userAnswer}<br>الإجابة الصحيحة: ${wrong.correctAnswer}</li>`).join('')}
+                        </ul>
+                    </div>
+                `;
+            }
+
+            resultContainer.innerHTML = resultHTML;
+        }
+
+        window.onload = loadQuestions;
+    </script>
+</head>
+<body dir="rtl">
+    <header>
+        <h1>اختبار 4 فيزياء</h1>
+    </header>
+    <center><h1>لم يتم وضع الاختبار بعد</h1></center>
+    <div class="container">
+        <button class="submit-btn" onclick="calculateScore()">إرسال الإجابات</button>
+    </div>
+
+    <div class="result"></div>
+
+
+
+    <footer>
+        <p>جميع الحقوق محفوظة &copy; اختبرني <br>
+        <a href="../index.html">العودة الى الرئيسية</a>
+        </p>
+    </footer>
+
+</body>
+</html>

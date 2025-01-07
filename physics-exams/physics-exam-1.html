@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>اختبار إلكتروني</title>
+    <style>
+
+        body {
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(to bottom, #4facfe, #00b4d8);
+            color: #333;
+        }
+
+        header {
+            background: #0077b6;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            margin: 0;
+        }
+
+        .container {
+            padding: 20px 10%;
+            background: #fff;
+            color: #333;
+            border-radius: 10px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+        }
+
+        .question {
+            margin-bottom: 20px;
+        }
+
+        .question h2 {
+            font-size: 20px;
+            color: #00b4d8;
+        }
+
+        @media (max-width: 375px) and (max-height: 801px) {
+            .question h2 {
+                font-size: 16px;
+            }
+        }
+
+        .options {
+            list-style: none;
+            padding: 0;
+        }
+
+        .options li {
+            margin-bottom: 10px;
+        }
+
+        .options input[type="radio"] {
+            margin-right: 10px;
+        }
+
+        .submit-btn {
+            display: inline-block;
+            padding: 10px 20px;
+            font-size: 1rem;
+            color: #333;
+            background: #00b4d8;
+            border: 0px solid ;
+
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .submit-btn:hover {
+            background: #fff;
+            color: #333;
+            border: 3px solid #e97510;
+        }
+
+        .result {
+            text-align: center;
+            margin-top: 20px;
+            display: none;
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        .result h2 {
+            font-size: 2.5rem;
+            color: #e97510;
+        }
+
+        .result p {
+            font-size: 1.2rem;
+            color: #333;
+        }
+
+        .trophy {
+            margin-top: 20px;
+            animation: bounce 1.5s infinite;
+        }
+
+        .wrong-answers {
+            background: rgb(76, 76, 84);
+            color: #fff;
+            list-style: none;
+            padding: 2px;
+            border-radius: 5px;
+            box-shadow: 0 8px 20px rgba(255, 111, 0, 0.6);
+            animation: slideIn 0.8s ease-out;
+        }
+
+        .wrong-answers ul{
+            list-style: none;
+            margin-right: 0px;
+            padding-right: 0px;
+        }
+
+
+        .wrong-answers ul li{
+            margin-bottom: 20px;
+
+        }
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0);
+            }
+            40% {
+                transform: translateY(-20px);
+            }
+            60% {
+                transform: translateY(-10px);
+            }
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(-100%);
+            }
+            to {
+                transform: translateX(0);
+            }
+        }
+
+        footer {
+            background: #fff;
+            color: #333;
+            padding: 10px;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        footer a {
+            color: #00b4d8;
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
+    <script>
+        
+        const questions = [
+        {
+            question: "إذا كان معامل انكسار مادة منشور ثلاثي 1.5 وزاوية رأس المنشور 60°، فما أقل زاوية سقوط ينتج عنها زاوية انحراف 30°؟",
+            options: [
+                "42°",
+                "45°",
+                "50°",
+                "40°"
+            ],
+            correct: "الإجابة الصحيحة: يتم تحديدها باستخدام القوانين المناسبة."
+        },
+        {
+            question: "شعاع ضوئي يسقط بزاوية 45° على سطح ماء (n = 1.33). احسب سرعة الشعاع المنكسر.",
+            options: [
+                "2.26 × 10^8 m/s",
+                "2.5 × 10^8 m/s",
+                "3.0 × 10^8 m/s",
+                "1.75 × 10^8 m/s"
+            ],
+            correct: "2.26 × 10^8 m/s."
+        },
+        {
+            question: "إذا كان الطول الموجي لضوء في الهواء 600 nm ومعامل انكسار المادة 1.5، فما الطول الموجي داخل المادة؟",
+            options: [
+                "600 nm",
+                "300 nm",
+                "450 nm",
+                "400 nm"
+            ],
+            correct: "400 nm."
+        },
+        {
+            question: "إذا كانت الزاوية الحرجة لمادة عند الانتقال إلى الهواء 40°، فما معامل انكسار المادة؟",
+            options: [
+                "1.33",
+                "1.5",
+                "1.556",
+                "2.0"
+            ],
+            correct: "1.556"
+        },
+        {
+            question: "شعاع ضوئي يسقط على منشور زجاجي بزاوية 70° ومعامل انكسار n = 1.52. احسب زاوية الانكسار.",
+            options: [
+                "35°",
+                "40°",
+                "37.8°",
+                "45°"
+            ],
+            correct: "37.8°"
+        },
+        {
+            question: "مصدر ضوئي يبعث ضوءًا بطول موجي 500 nm. إذا مر الضوء في مادة معامل انكسارها 1.25، فما تردد الضوء داخل المادة؟",
+            options: [
+                "5 × 10^14 Hz",
+                "6 × 10^14 Hz",
+                "4.8 × 10^14 Hz",
+                "7.2 × 10^14 Hz"
+            ],
+            correct: "6 × 10^14 Hz"
+        },
+        /*
+        {
+            "question": "ما الزاوية الحرجة عند الانتقال من الزجاج (n = 1.5) إلى الماء (n = 1.33)؟",
+            "answers": [
+                "48°",
+                "60°",
+                "62.46°",
+                "55°"
+            ],
+            "correct_answer": "62."
+        },
+        {
+            "question": "إذا انعكس شعاع ضوئي على سطح منشور ثلاثي بزاوية رأس 45°، فما الزاوية بين الشعاع المنعكس والشعاع الخارج؟",
+            "answers": [
+                "90°",
+                "106.9°",
+                "120°",
+                "75°"
+            ],
+            "correct_answer": "106.9°"
+        },
+        {
+            "question": "شعاع ضوئي يعبر مادة معامل انكسارها 2. ما الطول الموجي إذا كان تردده 5 × 10^14 Hz؟",
+            "answers": [
+                "300 nm",
+                "600 nm",
+                "900 nm",
+                "1000 nm"
+            ],
+            "correct_answer": "600 nm"
+        },
+        {
+            "question": "إذا كان معامل انكسار منشور زجاجي 1.6 وزاوية سقوط الشعاع 50°، فما زاوية الانحراف؟",
+            "answers": [
+                "25°",
+                "30°",
+                "35°",
+                "4. تعتمد على الزاوية الحرجة."
+            ],
+            "correct_answer": "الإجابة الصحيحة: تعتمد على الحسابات التفصيلية."
+        }*/
+    ];
+
+        function loadQuestions() {
+            const container = document.querySelector('.container');
+            questions.forEach((q, index) => {
+                const questionDiv = document.createElement('div');
+                questionDiv.className = 'question';
+
+                const questionTitle = document.createElement('h2');
+                questionTitle.innerText = `${index + 1}. ${q.question}`;
+                questionDiv.appendChild(questionTitle);
+
+                const optionsList = document.createElement('ul');
+                optionsList.className = 'options';
+                q.options.forEach(option => {
+                    const optionItem = document.createElement('li');
+                    optionItem.innerHTML = `<label><input type="radio" name="q${index}" value="${option}"> ${option}</label>`;
+                    optionsList.appendChild(optionItem);
+                });
+
+                questionDiv.appendChild(optionsList);
+                container.insertBefore(questionDiv, container.querySelector('.submit-btn'));
+            });
+        }
+
+        function calculateScore() {
+            let score = 0;
+            let wrongAnswers = [];
+
+            questions.forEach((q, index) => {
+                const selected = document.querySelector(`input[name="q${index}"]:checked`);
+                if (selected) {
+                    if (selected.value === q.correct) {
+                        score++;
+                    } else {
+                        wrongAnswers.push({
+                            question: q.question,
+                            userAnswer: selected.value,
+                            correctAnswer: q.correct
+                        });
+                    }
+                } else {
+                    wrongAnswers.push({
+                        question: q.question,
+                        userAnswer: "لم يتم اختيار إجابة",
+                        correctAnswer: q.correct
+                    });
+                }
+            });
+
+            document.querySelector('.container').style.display = 'none';
+
+            const resultContainer = document.querySelector('.result');
+            resultContainer.style.display = 'block';
+
+            let resultHTML = `
+                <h2>نتيجتك</h2>
+                <p>لقد أجبت بشكل صحيح على ${score} من أصل ${questions.length} أسئلة.</p>
+            `;
+
+            if (score === questions.length) {
+                resultHTML += `
+                    <div class="trophy">
+                        <h1 style="width: 120px; margin: 20px auto; display: block;font-size:66px">🎉</h1>
+                        <p style="font-size: 16px; color:black;">تهانينا! لقد أجبت على جميع الأسئلة بشكل صحيح 🎉</p>
+                    </div>
+                `;
+            } else if (wrongAnswers.length > 0) {
+                resultHTML += `
+                    <div class="wrong-answers">
+                        <h3>إجابات خاطئة:</h3>
+                        <ul>
+                            ${wrongAnswers.map(wrong => `<li><strong>${wrong.question}</strong><br>إجابتك: ${wrong.userAnswer}<br>الإجابة الصحيحة: ${wrong.correctAnswer}</li>`).join('')}
+                        </ul>
+                    </div>
+                `;
+            }
+
+            resultContainer.innerHTML = resultHTML;
+        }
+
+        window.onload = loadQuestions;
+    </script>
+</head>
+<body dir="rtl">
+    <header>
+        <h1>اختبار 1 فيزياء</h1>
+    </header>
+
+    <div class="container">
+        <button class="submit-btn" onclick="calculateScore()">إرسال الإجابات</button>
+    </div>
+    <center><h1>لم يتم وضع الاختبار بعد</h1></center>
+    <div class="result"></div>
+
+
+
+    <footer>
+        <p>جميع الحقوق محفوظة &copy; برعاية منصة دراستي <br>
+        <a href="../index.html">العودة الى الرئيسية</a>
+        </p>
+    </footer>
+
+</body>
+</html>
